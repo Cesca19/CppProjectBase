@@ -1,0 +1,17 @@
+[requires]
+sfml/2.6.2
+
+[generators]
+CMakeDeps
+CMakeToolchain
+
+[options]
+sfml/*:shared=True
+sfml/*:graphics=True
+sfml/*:window=True
+sfml/*:audio=True
+sfml/*:network=True
+sfml/*:system=True
+
+[layout]
+cmake_layout
