@@ -48,9 +48,9 @@ conan install .
 
 echo %blue%[INFO] Configuring project with CMake%white%
 cd build
-cmake .. -DCMAKE_TOOLCHAIN_FILE=generators/conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DCMAKE_BUILD_TYPE=Debug
 
-echo %blue%[INFO]Building project%white%
+echo %blue%[INFO] Building project%white%
 cmake --build . --config Debug
 
 :: echo %green%[OK] Build completed successfully (Windows)%white%

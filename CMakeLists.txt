@@ -7,4 +7,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_executable(testConan src/main.cpp)
 #target_compile_features(testConan PRIVATE cxx_std_17)
-target_link_libraries(testConan PRIVATE SFML::graphics)
+target_link_libraries(testConan PUBLIC sfml::sfml sfml-graphics sfml-window sfml-system)
