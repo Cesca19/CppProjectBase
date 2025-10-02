@@ -29,8 +29,7 @@ if not exist "%conan_exe_dir%\conan.exe" (
 set "PATH=%conan_exe_dir%;%PATH%"
 set "PYTHONPATH=%conan_install_dir%;%PYTHONPATH%"
 
-echo %blue%[INFO]Checking package integrity%white%
-
+echo %blue%[INFO] Checking package integrity%white%
 conan --version >nul 2>nul
 if %errorlevel% neq 0 (
 echo %yellow%[WARN] Conan not found or broken in "%conan_install_dir%". Try to reinstall.%white%

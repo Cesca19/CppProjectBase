@@ -45,25 +45,25 @@ conan profile detect --force
 
 echo %blue%[INFO] Installing dependencies with Conan%white%
 conan install . 
+if %errorlevel% neq 0 (
+    echo %red%[ERROR] Conan install failed.%white%
+    exit /b 1
+)
 
 echo %blue%[INFO] Configuring project with CMake%white%
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=Debug
+cmake .. -DCMAKE_BUILD_TYPE=Release  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin
+if %errorlevel% neq 0 (
+    echo %red%[ERROR] CMake configuration failed.%white%
+    exit /b 1
+)
 
 echo %blue%[INFO] Building project%white%
-cmake --build . --config Debug
+cmake --build . --config Release
+if %errorlevel% neq 0 (
+    echo %red%[ERROR] Build failed .%white%
+    exit /b 1
+)
+echo %green%[OK] Build completed successfully (Windows)%white%
 
-:: echo %green%[OK] Build completed successfully (Windows)%white%
-
-
-:: if exist .conan_intall_dir rmdir /s /q build
-:: md .conan_intall_dir
-:: python -m pip install conan --target .\.conan_intall_dir\ --upgrade
-:: set conan_exe_dir=%cd% + .conan_intall_dir\
-:: echo conan exe dir is %conan_exe_dir=%cd%%
-:: 
-:: 
-:: 
-:: 
-:: 
 endlocal
