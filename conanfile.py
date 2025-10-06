@@ -26,7 +26,7 @@ class ConanProjectConan(ConanFile):
     def generate(self):
         # Detect build type (Release/Debug)
         # build_type = str(self.settings.build_type)
-        exe_dir = os.path.join(self.build_folder, "bin")
+        exe_dir = os.path.join(self.source_folder, "bin")
         os.makedirs(exe_dir, exist_ok=True)
         for dep in self.dependencies.values():
             # DYLIB (MacOS)
