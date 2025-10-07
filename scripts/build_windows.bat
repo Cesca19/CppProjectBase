@@ -48,7 +48,7 @@ if %errorlevel% neq 0 (
 )
 
 echo %blue%[INFO] Checking Conan installation%white%
-call "./build_scripts/conan_installer.bat"
+call "./scripts/conan_installer.bat"
 
 echo %blue%[INFO] Configuring Conan profile%white%
 conan profile detect --force
