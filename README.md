@@ -22,9 +22,14 @@ This repository serves as a **clean, modern foundation** for new C++ projects:
 |------|--------------|
 | `CMakeLists.txt` | Main CMake configuration file |
 | `conanfile.py` | Conan dependency definitions (includes SFML) |
-| `src/` | Project source files |
-| `scripts/` | Build helper scripts |
 | `.gitignore` | Excludes build and temporary files |
+| `src/` | Project source files |
+| `include/` | Public header files - In case you're building a library or a package |
+| `lib/` | Third party librairies |
+| `docs/` | Documentation files |
+| `.github/` | Configuration files for GitHub Actions and other GitHub features |
+| `scripts/` | Helper scripts for setup, builds or other tasks |
+
 <br>
 
 ## 🧰 Prerequisites
