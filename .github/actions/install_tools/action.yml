@@ -1,20 +1,42 @@
 name: Install Tools
-description: Install Python, Conan, and CMake for the build environment
+description: Install Python, Conan, and CMake for both Windows and Linux
 runs:
-  using: "composite" # Composite actions allow you to collect a series of workflow job steps into a single action which you can then run as a single job step in multiple workflows. 
+  using: "composite"
   steps:
+    # Step 1: Setup Python (works for both OS)
     - name: Set up Python 3.x
       uses: actions/setup-python@v5
       with:
         python-version: '3.x'
 
-    - name: Install Conan package manager
+    # Step 2: Install Conan on Linux
+    - name: Install Conan on Linux
+      if: runner.os == 'Linux'
       run: |
         python -m pip install --upgrade pip
         pip install conan
         conan --version
+      shell: bash
 
-    - name: Install CMake
+    # Step 3: Install Conan on Windows
+    - name: Install Conan on Windows
+      if: runner.os == 'Windows'
+      run: |
+        python -m pip install --upgrade pip
+        pip install conan
+        conan --version
+      shell: pwsh
+
+    # Step 4: Install CMake on Linux
+    - name: Install CMake on Linux
+      if: runner.os == 'Linux'
+      uses: jwlawson/actions-setup-cmake@v2
+      with:
+        cmake-version: '3.28.0'
+
+    # Step 5: Install CMake on Windows
+    - name: Install CMake on Windows
+      if: runner.os == 'Windows'
       uses: jwlawson/actions-setup-cmake@v2
       with:
         cmake-version: '3.28.0'

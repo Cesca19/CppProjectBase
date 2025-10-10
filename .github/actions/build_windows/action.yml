@@ -5,3 +5,4 @@ runs:
   steps:
     - name: Run Windows build script
       run: scripts\\build_windows.bat
+      shell: pwsh

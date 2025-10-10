@@ -5,6 +5,8 @@ runs:
   steps:
     - name: Make Linux build script executable
       run: chmod +x scripts/build_linux.sh
+      shell: bash
 
     - name: Run Linux build script
       run: ./scripts/build_linux.sh
+      shell: bash
