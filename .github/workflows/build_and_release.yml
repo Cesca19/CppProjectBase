@@ -57,6 +57,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        
+
       - name: Publish release
         uses: ./.github/actions/publish_release
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
