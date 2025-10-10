@@ -25,7 +25,7 @@ runs:
         python -m pip install --upgrade pip
         pip install conan
         conan --version
-      shell: pwsh
+      shell: cmd
 
     # Step 4: Install CMake on Linux
     - name: Install CMake on Linux

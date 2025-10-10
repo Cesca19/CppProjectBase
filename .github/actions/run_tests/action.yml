@@ -6,7 +6,7 @@ runs:
     - name: Run test on Windows
       if: runner.os == 'Windows' # Findout how to pass the exe name as an argument
       run: powershell -Command "Start-Process -FilePath .\\bin\\cpp_project_base.exe -NoNewWindow -Wait; Write-Host ' App launched successfully!'"
-      shell: pwsh
+      shell: cmd
 
     # - name: Run test on Linux
       # if: runner.os == 'Linux'

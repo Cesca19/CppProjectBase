@@ -6,7 +6,7 @@ runs:
     - name: Compress Windows build
       if: runner.os == 'Windows'
       run: powershell Compress-Archive -Path bin -DestinationPath "CppProjectBaseApp-${{ github.ref_name }}-Windows.zip"
-      shell: pwsh
+      shell: cmd
 
     # - name: Compress Linux build
       # if: runner.os == 'Linux'

@@ -5,4 +5,7 @@ runs:
   steps:
     - name: Run Windows build script
       run: scripts\\build_windows.bat
-      shell: pwsh
+      shell: cmd
+    - name: List script directory
+      run: dir .\scripts\
+      shell: cmd
