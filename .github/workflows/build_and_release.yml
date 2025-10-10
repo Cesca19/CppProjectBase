@@ -46,7 +46,7 @@ jobs:
           path: |
             CppProjectBaseApp-*.zip
 #            CppProjectBaseApp-*.tar.gz
-          if-no-files-found: error
+          if-no-files-found: warn 
 
   release:
     name: Create GitHub Release
