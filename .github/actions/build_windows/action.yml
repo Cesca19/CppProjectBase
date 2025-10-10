@@ -7,5 +7,5 @@ runs:
       run: scripts\\build_windows.bat
       shell: cmd
     - name: List script directory
-      run: dir .\scripts\
+      run: dir .\\scripts\\
       shell: cmd

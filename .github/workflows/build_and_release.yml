@@ -30,10 +30,9 @@ jobs:
         uses: ./.github/actions/build_windows
 
       # - name: Build Linux
-        # if: runner.os == 'Linux'
-        # uses: ./.github/actions/build_linux
+      #   if: runner.os == 'Linux'
+      #   uses: ./.github/actions/build_linux
 
-# Temporarily disable Linux build  and tests in run_tests
       - name: Run quick test
         uses: ./.github/actions/run_tests
 
