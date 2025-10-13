@@ -25,6 +25,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache Conan packages
+        uses: actions/cache@v4
+        with:
+          # Conan 2.x cache directory (Conan 1.x uses ~/.conan)
+          path: ~/.conan2
+          # The cache key depends on OS and conanfile.txt hash
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-conan-
+
       - name: Install build tools
         uses: ./.github/actions/install_tools
 
