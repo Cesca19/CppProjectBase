@@ -14,7 +14,6 @@ if "%~1"=="--help" goto :help
 
 if "%~1"=="Debug" set BUILD_TYPE=Debug 
 if "%~1"=="Release" set BUILD_TYPE=Release
-
 echo %blue%[INFO] Build type selected: (%BUILD_TYPE%)%white%
 
 echo %blue%[INFO] Checking Python installation%white%
@@ -49,6 +48,8 @@ if %errorlevel% neq 0 (
 
 echo %blue%[INFO] Checking Conan installation%white%
 call "./scripts/conan_installer.bat"
+
+call "./scripts/clean_windows.bat"
 
 echo %blue%[INFO] Configuring Conan profile%white%
 conan profile detect --force

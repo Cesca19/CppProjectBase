@@ -21,7 +21,10 @@ class ConanProjectConan(ConanFile):
     }
 
     def layout(self):
-        cmake_layout(self)
+        # Basic layout but force the generator folder path
+        self.folders.build = "build"
+        self.folders.generators = "build/generators"
+        #cmake_layout(self)
 
     def generate(self):
         # Detect build type (Release/Debug)
