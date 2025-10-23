@@ -42,9 +42,9 @@ jobs:
         if: runner.os == 'Windows'
         uses: ./.github/actions/build_windows
 
-      # - name: Build Linux
-      #   if: runner.os == 'Linux'
-      #   uses: ./.github/actions/build_linux
+      - name: Build Linux
+        if: runner.os == 'Linux'
+        uses: ./.github/actions/build_linux
 
       - name: Run quick test
         uses: ./.github/actions/run_tests
@@ -58,7 +58,7 @@ jobs:
           name: ${{ runner.os }}-build
           path: |
             CppProjectBaseApp-*.zip
-#            CppProjectBaseApp-*.tar.gz
+            CppProjectBaseApp-*.tar.gz
           if-no-files-found: warn 
 
   release:

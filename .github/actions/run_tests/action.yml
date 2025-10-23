@@ -12,13 +12,13 @@ runs:
         ) else (
           echo Binary not found & exit 1
         )
-    # - name: Run test on Linux
-      # if: runner.os == 'Linux'
-      # shell: bash
-      # run: |
-        # if [ -x ./bin/cpp_project_base ]; then
-          # echo "Binary found"
-        # else
-          # echo "Binary not found" >&2
-          # exit 1
-        # fi
+    - name: Run test on Linux
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        if [ -x ./bin/cpp_project_base ]; then
+          echo "Binary found"
+        else
+          echo "Binary not found" >&2
+          exit 1
+        fi

@@ -23,8 +23,6 @@ runs:
       if: runner.os == 'Windows'
       run: |
         python -m pip install --upgrade pip
-#        pip install conan
-#        conan --version
       shell: cmd
 
     # Step 4: Install CMake on Linux
