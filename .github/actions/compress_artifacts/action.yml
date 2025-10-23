@@ -8,7 +8,7 @@ runs:
       run: powershell Compress-Archive -Path bin -DestinationPath "CppProjectBaseApp-${{ github.ref_name }}-Windows.zip"
       shell: cmd
 
-    # - name: Compress Linux build
-      # if: runner.os == 'Linux'
-      # run: tar -czf "CppProjectBaseApp-${{ github.ref_name }}-Linux.tar.gz" bin
-      # shell: bash
+    - name: Compress Linux build
+      if: runner.os == 'Linux'
+      run: tar -czf "CppProjectBaseApp-${{ github.ref_name }}-Linux.tar.gz" bin
+      shell: bash
