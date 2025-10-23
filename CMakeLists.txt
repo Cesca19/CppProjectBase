@@ -13,3 +13,10 @@ add_executable(${MY_TARGET} src/main.cpp)
 
 target_compile_features(${MY_TARGET} PRIVATE cxx_std_17)
 target_link_libraries(${MY_TARGET} PUBLIC sfml::sfml)
+
+# --- RPATH setup ---
+set_target_properties(${MY_TARGET} PROPERTIES
+    BUILD_WITH_INSTALL_RPATH TRUE
+    INSTALL_RPATH "$ORIGIN"
+    INSTALL_RPATH_USE_LINK_PATH TRUE
+)
