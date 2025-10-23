@@ -1,5 +1,11 @@
 name: Publish GitHub Release
 description: Create a GitHub release and attach Windows/Linux build artifacts
+
+inputs:
+  github_token:
+    description: "GitHub token used to authenticate release publishing"
+    required: true
+
 runs:
   using: "composite"
   steps:
@@ -15,7 +21,8 @@ runs:
         name: "Release ${{ github.ref_name }}"
         draft: false
         prerelease: false
-        files: artifacts/**/*.{zip,tar.gz}
+        files: |
+          artifacts/**/*.zip
+          artifacts/**/*.tar.gz
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+        GITHUB_TOKEN: ${{ inputs.github_token }}

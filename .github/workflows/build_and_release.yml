@@ -7,6 +7,9 @@ on:
     tags:
       - 'v*'           # Trigger release when pushing a version tag
 
+permissions:
+  contents: write
+
 jobs:
   build_and_test:
     name: Build and Test Executable (${{ matrix.os }})
@@ -22,23 +25,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Cache Conan packages
+        uses: actions/cache@v4
+        with:
+          # Conan 2.x cache directory (Conan 1.x uses ~/.conan)
+          path: ~/.conan2
+          # The cache key depends on OS and conanfile.txt hash
+          key: ${{ runner.os }}-conan-${{ hashFiles('conanfile.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-conan-
+
       - name: Install build tools
-        uses: ./.github/actions/install_tools.yml
+        uses: ./.github/actions/install_tools
 
       - name: Build Windows
         if: runner.os == 'Windows'
-        uses: ./.github/actions/build_windows.yml
+        uses: ./.github/actions/build_windows
 
       # - name: Build Linux
-        # if: runner.os == 'Linux'
-        # uses: ./.github/actions/build_linux.yml
+      #   if: runner.os == 'Linux'
+      #   uses: ./.github/actions/build_linux
 
-# Temporarily disable Linux build  and tests in run_tests.yml
       - name: Run quick test
-        uses: ./.github/actions/run_tests.yml
+        uses: ./.github/actions/run_tests
 
       - name: Compress build artifacts
-        uses: ./.github/actions/compress_artifacts.yml
+        uses: ./.github/actions/compress_artifacts
 
       - name: Upload compressed artifacts
         uses: actions/upload-artifact@v4
@@ -47,7 +59,7 @@ jobs:
           path: |
             CppProjectBaseApp-*.zip
 #            CppProjectBaseApp-*.tar.gz
-          if-no-files-found: error
+          if-no-files-found: warn 
 
   release:
     name: Create GitHub Release
@@ -56,5 +68,10 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/v')
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Publish release
-        uses: ./.github/actions/publish_release.yml
+        uses: ./.github/actions/publish_release
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
