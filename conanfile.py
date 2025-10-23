@@ -32,6 +32,9 @@ class ConanProjectConan(ConanFile):
         exe_dir = os.path.join(self.source_folder, "bin")
         os.makedirs(exe_dir, exist_ok=True)
         for dep in self.dependencies.values():
+            # SO (Linux)
+            for lib_path in dep.cpp_info.libdirs:
+                copy(self, "*.so*", src=lib_path, dst=exe_dir)
             # DYLIB (MacOS)
             for lib_path in dep.cpp_info.libdirs:
                 copy(self, "*.dylib", src=lib_path, dst=exe_dir)
