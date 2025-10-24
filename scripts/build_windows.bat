@@ -55,7 +55,7 @@ echo %blue%[INFO] Configuring Conan profile%white%
 conan profile detect --force
 
 echo %blue%[INFO] Installing dependencies with Conan (%BUILD_TYPE%)%white%
-conan install .  -s build_type=%BUILD_TYPE% --build=missing
+conan install .  -s build_type=%BUILD_TYPE% --build=missing -s compiler.runtime=static
 if %errorlevel% neq 0 (
     echo %red%[ERROR] Conan install failed.%white%
     exit /b 1

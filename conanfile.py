@@ -11,15 +11,21 @@ class ConanProjectConan(ConanFile):
     requires = "sfml/2.6.2"
     generators = "CMakeDeps", "CMakeToolchain"
 
+    # NOTE: Static linking is recommended to make the executable fully portable
+    # and avoid missing system libraries (needed by your libs)
     default_options = {
-        "sfml/*:shared": True,
+        "sfml/*:shared": False,
         "sfml/*:graphics": True,
         "sfml/*:window": True,
         "sfml/*:audio": True,
         "sfml/*:network": True,
         "sfml/*:system": True,
     }
-
+    
+    def configure(self):
+        if self.settings.compiler == "msvc":
+                    self.settings.compiler.runtime = "static"
+        
     def layout(self):
         # Basic layout but force the generator folder path
         self.folders.build = "build"

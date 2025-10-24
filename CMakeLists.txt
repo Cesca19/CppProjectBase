@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.28)
 project(CppProjectBase VERSION 0.0.1 LANGUAGES CXX)
 
+# --- Force static linking of C++ runtimes ---
+if (MSVC)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+else()
+    message(STATUS "GCC/Clang detected - Using static libstdc++ and libgcc")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libstdc++ -static-libgcc")
+endif()
+
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_BINARY_DIR}/generators")
 find_package(SFML REQUIRED COMPONENTS system window graphics)
 
