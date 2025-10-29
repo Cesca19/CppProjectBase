@@ -2,6 +2,7 @@ import os
 from conan import ConanFile
 from conan.tools.cmake import cmake_layout
 from conan.tools.files import copy
+from conan.tools.cmake import CMakeToolchain, CMakeDeps
 
 class ConanProjectConan(ConanFile):
     name = "conan_project"
@@ -9,30 +10,28 @@ class ConanProjectConan(ConanFile):
 
     settings = "os", "compiler", "build_type", "arch"
     requires = "sfml/2.6.2"
-    generators = "CMakeDeps", "CMakeToolchain"
-
-    # NOTE: Static linking is recommended to make the executable fully portable
-    # and avoid missing system libraries (needed by your libs)
+    generators = "CMakeDeps"
+    
+    # Added option to control runtime linking style
     default_options = {
-        "sfml/*:shared": False,
         "sfml/*:graphics": True,
         "sfml/*:window": True,
         "sfml/*:audio": True,
         "sfml/*:network": True,
         "sfml/*:system": True,
-    }
-    
-    def configure(self):
-        if self.settings.compiler == "msvc":
-                    self.settings.compiler.runtime = "static"
+    }     
         
     def layout(self):
-        # Basic layout but force the generator folder path
+        """Defines folder structure for build and generated files"""
         self.folders.build = "build"
         self.folders.generators = "build/generators"
-        #cmake_layout(self)
 
     def generate(self):
+        """Passes runtime link type to CMake through toolchain variables."""
+        tc = CMakeToolchain(self)
+        tc.variables["RUNTIME_LINK"] = str(self.settings.compiler.runtime)
+        tc.generate()
+        """Copies dependency DLLs (like SFML) next to the final executable."""
         # Detect build type (Release/Debug)
         # build_type = str(self.settings.build_type)
         exe_dir = os.path.join(self.source_folder, "bin")
@@ -46,4 +45,13 @@ class ConanProjectConan(ConanFile):
                 copy(self, "*.dylib", src=lib_path, dst=exe_dir)
             # DLL (Windows)
             for bin_path in dep.cpp_info.bindirs:
-                copy(self, "*.dll", src=bin_path, dst=exe_dir) 
+                copy(self, "*.dll", src=bin_path, dst=exe_dir)
+
+
+
+
+
+
+
+
+        

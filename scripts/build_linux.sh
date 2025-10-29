@@ -99,8 +99,8 @@ else
     log_success "g++ is already installed."
 fi
 
-# -- patchelf for linux binary dependencies
-install_package "patchelf"
+# # -- patchelf for linux binary dependencies
+# install_package "patchelf"
 
 # --- pkg-config ---
 if ! command -v pkg-config &>/dev/null; then
