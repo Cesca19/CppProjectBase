@@ -41,6 +41,16 @@ BUILD_TYPE=Debug
 if [[ "$1" == "Release" ]]; then
     BUILD_TYPE=Release
 fi
+
+# ---- Static or Dynamic linking ---
+IS_SHARED=True
+RUNTIME_LINK=dynamic
+
+if [[ "$2" == "static" ]]; then
+    IS_SHARED=False
+    RUNTIME_LINK=static
+fi
+
 VIRTUAL_ENV_NAME=".conan_venv"
 
 log_info "Build type selected: ${BUILD_TYPE}"
@@ -221,24 +231,24 @@ fi
 log_success "Conan profile successfully configured."
 
 # --- Conan dependency installation ---
-log_info "Installing dependencies with Conan (${BUILD_TYPE})"
-if ! conan install . -s build_type=${BUILD_TYPE} --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True; then
+log_info "Installing dependencies with Conan (${BUILD_TYPE}, ${RUNTIME_LINK})"
+if ! conan install . -s build_type=${BUILD_TYPE}  -o *:shared=${IS_SHARED} --build=missing -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True; then
     log_error "Conan dependency installation failed."
     exit 1
 fi
 log_success "Conan dependencies installed successfully."
 
 # --- Configure CMake ---
-log_info "Configuring project with CMake (${BUILD_TYPE})"
+log_info "Configuring project with CMake (${BUILD_TYPE}, ${RUNTIME_LINK})"
 mkdir -p build && cd build
-if ! cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin ; then
+if ! cmake .. -DCMAKE_BUILD_TYPE=${BUILD_TYPE} -DRUNTIME_LINK=${RUNTIME_LINK} -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin ; then
     log_error "CMake configuration failed."
     exit 1
 fi
 log_success "CMake configuration successful."
 
 # --- Build project ---
-log_info "Building project (${BUILD_TYPE})"
+log_info "Building project (${BUILD_TYPE}, ${RUNTIME_LINK})"
 if ! cmake --build . --config ${BUILD_TYPE}; then
     log_error "Build failed."
     exit 1

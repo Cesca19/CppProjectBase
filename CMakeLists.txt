@@ -3,6 +3,7 @@ project(CppProjectBase VERSION 0.0.1 LANGUAGES CXX)
 
 # --- Runtime link selection ---
 if (NOT DEFINED RUNTIME_LINK)
+    message(STATUS "RUNTIME_LINK not defined, defaulting to 'dynamic'")
     set(RUNTIME_LINK "dynamic")
 endif()
 message(STATUS "Runtime link type: ${RUNTIME_LINK}")
@@ -16,6 +17,21 @@ if (MSVC)
         set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
         message(STATUS "Using dynamic runtime (/MD or /MDd)")
     endif()
+elseif(UNIX AND NOT APPLE)
+    set(CMAKE_SKIP_BUILD_RPATH FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "$ORIGIN")
+    # For Linux, you can set flags for static or dynamic linking if needed
+    # if (RUNTIME_LINK STREQUAL "static")
+    #     message(STATUS "Using static linking on Linux")
+    #     set(CMAKE_EXE_LINKER_FLAGS "-static")
+    # else()
+    #     message(STATUS "Using dynamic linking on Linux")
+    # endif()
+endif()
+
+if(UNIX AND NOT APPLE AND RUNTIME_LINK STREQUAL "static")
+    set(BUILD_SHARED_LIBS FALSE)
 endif()
 
 # --- SFML (via Conan) ---
@@ -33,6 +49,9 @@ set(MY_TARGET cpp_project_base)
 add_executable(${MY_TARGET} src/main.cpp)
 target_compile_features(${MY_TARGET} PRIVATE cxx_std_17)
 target_link_libraries(${MY_TARGET} PUBLIC sfml::sfml)
+
+#target_link_libraries(${MY_TARGET}  -static)
+
 
 # --- Install required system libraries for dynamic runtime on Windows ---
 if (MSVC AND RUNTIME_LINK STREQUAL "dynamic")

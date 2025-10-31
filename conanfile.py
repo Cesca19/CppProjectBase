@@ -10,9 +10,7 @@ class ConanProjectConan(ConanFile):
 
     settings = "os", "compiler", "build_type", "arch"
     requires = "sfml/2.6.2"
-    generators = "CMakeDeps"
-    
-    # Added option to control runtime linking style
+    generators = "CMakeDeps", "CMakeToolchain"
     default_options = {
         "sfml/*:graphics": True,
         "sfml/*:window": True,
@@ -27,12 +25,8 @@ class ConanProjectConan(ConanFile):
         self.folders.generators = "build/generators"
 
     def generate(self):
-        """Passes runtime link type to CMake through toolchain variables."""
-        tc = CMakeToolchain(self)
-        tc.variables["RUNTIME_LINK"] = str(self.settings.compiler.runtime)
-        tc.generate()
         """Copies dependency DLLs (like SFML) next to the final executable."""
-        # Detect build type (Release/Debug)
+        # Detect build type (rm .Release/Debug)
         # build_type = str(self.settings.build_type)
         exe_dir = os.path.join(self.source_folder, "bin")
         os.makedirs(exe_dir, exist_ok=True)
