@@ -22,17 +22,62 @@ log_success() { echo -e "${GREEN}[OK]${RESET} $1"; }
 log_warn()    { echo -e "${YELLOW}[WARN]${RESET} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${RESET} $1"; }
 
+show_help () {
+    cat << EOF
+Usage: ./scripts/build_linux.sh [BUILD_TYPE] [RUNTIME_LINK]
+
+Build the project and prepare a portable Linux build.
+
+Arguments:
+  BUILD_TYPE       Type of build configuration.
+                   Accepted values:
+                     Debug       Compiles with debug symbols (no optimizations)
+                     Release     Compiles optimized release build
+                   Default: Debug
+
+  RUNTIME_LINK     Controls how the C++ runtime and dependencies are linked.
+                   Accepted values:
+                     dynamic     Default. Uses shared (.so) libraries.
+                                 Creates a portable folder with local .so files.
+                     static      Enables static linking of libgcc + libstdc++.
+                                 System libs remain dynamic, but the build is
+                                 more self-contained.
+                   Default: dynamic
+
+Examples:
+  ./scripts/build_linux.sh Debug
+      → Debug build, dynamic linking
+
+  ./scripts/build_linux.sh Release
+      → Release build, dynamic linking
+
+  ./scripts/build_linux.sh Release static
+      → Release build, static libgcc/libstdc++ (recommended for portability)
+
+What this script does:
+  1. Detects your package manager (apt, dnf, yum, pacman)
+  2. Installs required dependencies (g++, cmake, python3, pip, pkg-config…)
+  3. Creates a Python virtual environment for Conan
+  4. Installs or updates Conan inside the venv
+  5. Runs 'conan profile detect'
+  6. Installs all project dependencies using Conan
+  7. Configures CMake with the correct RUNTIME_LINK mode
+  8. Builds the project into ./bin/
+  9. Ensures all required .so files are copied next to the executable
+
+Notes:
+  • The build is portable: the executable will load only the .so files
+    located in ./bin/, never from the Conan cache or system directories.
+  • Depending on your system, some libraries (like X11) may still
+    be required to run the app
+  • To run the app, simply execute:
+        ./bin/cpp_project_base
+EOF
+}
+
 # --- Help ---
 if [[ "$1" == "--help" || "$1" == "-h" ]]; then
-    echo "Usage: ./scripts/build_linux.sh [BUILD_TYPE] | --help"
-    echo
-    echo "  BUILD_TYPE can be:"
-    echo "    Debug     - Build with debug symbols"
-    echo "    Release   - Build optimized release"
-    echo
-    echo "Examples:"
-    echo "  ./scripts/build_linux.sh Debug"
-    echo "  ./scripts/build_linux.sh Release"
+    show_help
     exit 0
 fi
 
@@ -53,7 +98,9 @@ fi
 
 VIRTUAL_ENV_NAME=".conan_venv"
 
-log_info "Build type selected: ${BUILD_TYPE}"
+
+log_info "Selected build type: ${BUILD_TYPE}"
+log_info "Selected runtime linkage ${RUNTIME_LINK}"
 
 # --- Detect package manager ---
 if command -v apt-get &>/dev/null; then
@@ -108,9 +155,6 @@ if ! command -v g++ &>/dev/null; then
 else
     log_success "g++ is already installed."
 fi
-
-# # -- patchelf for linux binary dependencies
-# install_package "patchelf"
 
 # --- pkg-config ---
 if ! command -v pkg-config &>/dev/null; then
@@ -253,3 +297,4 @@ if ! cmake --build . --config ${BUILD_TYPE}; then
     log_error "Build failed."
     exit 1
 fi
+

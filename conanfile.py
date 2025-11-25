@@ -26,8 +26,6 @@ class ConanProjectConan(ConanFile):
 
     def generate(self):
         """Copies dependency DLLs (like SFML) next to the final executable."""
-        # Detect build type (rm .Release/Debug)
-        # build_type = str(self.settings.build_type)
         exe_dir = os.path.join(self.source_folder, "bin")
         os.makedirs(exe_dir, exist_ok=True)
         for dep in self.dependencies.values():
