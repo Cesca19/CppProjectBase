@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Run Windows build script
-      run: scripts\\build_windows.bat Release
+      run: scripts\\build_windows.bat Release static
       shell: cmd
     - name: List script directory
       run: dir .\\scripts\\

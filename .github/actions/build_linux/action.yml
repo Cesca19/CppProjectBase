@@ -8,5 +8,5 @@ runs:
       shell: bash
 
     - name: Run Linux build script
-      run: ./scripts/build_linux.sh Release
+      run: ./scripts/build_linux.sh Release static
       shell: bash
