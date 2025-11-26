@@ -48,6 +48,35 @@ This repository serves as a **clean, modern foundation** for new C++ projects:
 - **Make**
 <br>
 
+## 🧩 How to use this template int your Project
+Follow these steps to adapt the template to your own project:
+
+#### 1. Add your project's dependencies in the conanfile.py
+Edit the `requires` variable of the file to include the libraries you want:
+
+```
+requires = (
+    "sfml/2.6.1",
+    # Add your libraries here and remove the useless ones...
+)
+```
+<br>
+
+#### 2. Add your source and header files
+- Place .cpp files in src/
+- Place .hpp / .h files in include/
+- Organize the directories as you prefer
+<br>
+
+#### 3. Update the CMakeList.txt
+<br>
+
+#### 4. Build the project
+<br>
+
+#### 5 . Update the github action release name
+<br>
+
 ## 💻 Build an run Instructions
 #### 1. Clone the repository
 ```bash
