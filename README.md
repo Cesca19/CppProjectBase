@@ -48,16 +48,16 @@ This repository serves as a **clean, modern foundation** for new C++ projects:
 - **Make**
 <br>
 
-## 🧩 How to use this template int your Project
+## 🧩 How to use this template in your Project
 Follow these steps to adapt the template to your own project:
 
-#### 1. Add your project's dependencies in the conanfile.py
-Edit the `requires` variable of the file to include the libraries you want:
+#### 1. Add your dependencies in conanfile.py
+Edit the `requires` variable to include the libraries you want to use:
 
 ```
 requires = (
     "sfml/2.6.1",
-    # Add your libraries here and remove the useless ones...
+    # Add or remove libraries here...
 )
 ```
 <br>
@@ -65,16 +65,69 @@ requires = (
 #### 2. Add your source and header files
 - Place .cpp files in src/
 - Place .hpp / .h files in include/
-- Organize the directories as you prefer
+- Organize directories as you like
 <br>
 
-#### 3. Update the CMakeList.txt
+#### 3. Update the CMakeLists.txt
+##### a -Set your project and executable name 
+Update the project name and version here
+```
+project(YourProjectName VERSION 0.0.1 LANGUAGES CXX)
+```
+Update the executable name by modifying the variable `MY_TARGET`:
+```
+set(MY_TARGET your_executable_name)
+```
+##### b - Add your source files 
+Add your .cpp files to the executable with the `add_executable` command here:
+```
+add_executable(${MY_TARGET}
+   src/main.cpp
+   # Add your source files here
+)
+```
+
+##### c - Find and Add required libraries
+Use  the `find_package` command to locate each dependency you want to use:
+```
+find_package(SFML REQUIRED COMPONENTS system window graphics)
+```
+Then link them to your executable with the `target_link_libraries` command:
+```
+target_link_libraries(${MY_TARGET}
+   PUBLIC sfml::sfml
+   # Add your libraries here
+)
+```
 <br>
 
 #### 4. Build the project
+Run the appropriate build script:
+```
+./scripts/build_linux.sh
+```
+or
+```
+.\scripts\build_windows.bat
+```
+Conan will install your dependencies and CMake will configure the project automatically. 
+
 <br>
 
-#### 5 . Update the github action release name
+#### 5. Update the GitHub Actions release name
+If you want your release archives to use your project name, edit the file:
+```
+.github/actions/compress_artifacts/action.yml
+``` 
+Replace CppProjectBaseApp with your chosen name here:
+```
+run: powershell Compress-Archive -Path bin -DestinationPath "CppProjectBaseApp-${{ github.ref_name }}-Windows.zip"
+```
+and here:
+```
+run: tar -czf "CppProjectBaseApp-${{ github.ref_name }}-Linux.tar.gz" bin
+```
+
 <br>
 
 ## 💻 Build an run Instructions
@@ -90,12 +143,12 @@ Open your terminal at the root of the repository and launch the following comman
 
 ##### On Linux
 ```
-  ./scripts/build_linux.sh
+./scripts/build_linux.sh
 ```
 
 ##### On Windows
 ```
-  .\scripts\build_windows.bat
+.\scripts\build_windows.bat
 ```
 <br>
 
@@ -104,12 +157,12 @@ Ater a successful build, execute the binaries by launching the following command
 
 ##### On Linux
 ```
-  ./bin/cpp_project_base
+./bin/cpp_project_base
 ```
 
 ##### On Windows
 ```
-  .\bin\cpp_project_base.exe
+.\bin\cpp_project_base.exe
 ```
 <br>
 
@@ -139,11 +192,11 @@ GitHub Actions will:
 * Run basic tests and compress the binaries.
 * Upload the build artifacts for download.
 
-##### ▶️ How to Trigger manually
+##### ▶️ How to Trigger it
 ```
-   git add .
-   git commit -m "Update something [build]"
-   git push origin main
+git add .
+git commit -m "Update something [build]"
+git push origin main
 ```
 
 ##### 🧭 Where to Find Build Artifacts 
@@ -161,7 +214,7 @@ When you push a tag starting with v (for example v1.0.0), GitHub Actions will au
 * Download the generated artifacts.
 * Create a new GitHub Release with .zip files for Windows and Linux attached.
 
-##### ▶️ How to Trigger manually
+##### ▶️ How to Trigger it
 ```
 git tag v1.0.0
 git push origin v1.0.0
