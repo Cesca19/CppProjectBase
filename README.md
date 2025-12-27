@@ -141,12 +141,12 @@ cd CppProjectBase
 #### 2. Launch the build scripts
 Open your terminal at the root of the repository and launch the following commands
 
-##### On Linux
+######  On Linux
 ```
 ./scripts/build_linux.sh
 ```
 
-##### On Windows
+######  On Windows
 ```
 .\scripts\build_windows.bat
 ```
@@ -155,12 +155,12 @@ Open your terminal at the root of the repository and launch the following comman
 #### 3. Execute the binaries
 Ater a successful build, execute the binaries by launching the following commands
 
-##### On Linux
+######  On Linux
 ```
 ./bin/cpp_project_base
 ```
 
-##### On Windows
+######  On Windows
 ```
 .\bin\cpp_project_base.exe
 ```
@@ -229,6 +229,85 @@ Once complete, your release will appear in the release section of your repositor
 * You can customize dependencies directly in `conanfile.py`.
 * The build scripts automatically create and configure the `build/` directory.
 * Ideal starting point for SFML, SDL, ImGui, boost or pure C++ projects.
+
+## IDE Setup for Autocompletion and Code Navigation
+
+To ensure your IDE correctly recognizes any Conan-installed libraries (like SFML, Boost) 
+while programming, follow these steps:
+
+Before launching your IDE make sure to run the right build script
+######  On Linux
+```
+./scripts/build_linux.sh
+```
+
+######  On Windows
+```
+.\scripts\build_windows.bat
+```
+This command regenerates the build preset, including all paths to the
+include directories that will be used by your IDE.
+<br>
+
+After that follow the next steps depending on your IDE.
+
+<br>
+
+### VS Code
+With VsCode you have two options
+
+#### A - Using CMake Tools Preset
+* Make sure the `CMake Tools` extension(ms-vscode.cmake-tools) is installed.
+* Open the Command Palette with Ctrl+Shift+P.
+* Select hte option: `CMake: Select a Configure Preset`
+* Choose `compile-commands` profile preset
+  This will then automatically configure autocompletion, include paths, and all other settings.
+
+<br>
+
+#### B - Manual settings.json configuration
+
+In your workspace go to the file `.vscode/settings.json.` and add the following line:
+```
+"C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json"
+```
+Autocompletion and IntelliSense should now work for all Conan-installed libraries.
+
+<br>
+
+### CLion
+#### A - First-time project setup (recommended)
+When opening the project for the first time, CLion may show the `Open Project Wizard`.
+
+If so, then: 
+* Right under the profile section select the `compile-commands` preset
+* Check the `Enable profile` box and apply your changes by pressing th `Ok` button
+CLion will then automatically configure autocompletion, include paths, and all other settings.
+This step can eliminate most manual setup steps below.
+
+<br>
+
+#### B - Manual setup (if needed)
+
+###### 1. Invalidate caches for safety
+   * Go to File → Invalidate Caches
+   * Ensure `Clear File System Cache` and `Reset CMake Cache` are enabled for a full reset.
+   * Click on the `Invalidate and Restart` button
+###### 2. Reload the CMake project
+   * Right-click on the CMakeLists.txt file.
+   * Select Load / Reload CMake Project
+###### 3. Set CMake configure profile preset
+   * Go to Settings → Build, Execution, Deployment → CMake.
+   * In the Profiles section, select the `compile-commands` profile preset
+   * Check the `Enable profile` box and apply your changes
+
+CLion will then automatically configure autocompletion, include paths, and all other settings.
+
+<br>
+
+### Notes
+* Both CLion and VS Code will correctly index all Conan dependencies, even if you never build from the IDE.
+* The compile_commands.json file is generated automatically by the build script.
 
 
 

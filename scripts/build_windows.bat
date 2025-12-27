@@ -92,7 +92,7 @@ if %errorlevel% neq 0 (
 
 echo %blue%[INFO] Configuring project with CMake (%BUILD_TYPE%, runtime=%RUNTIME_LINK%)%white%
 cd build
-cmake .. -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DRUNTIME_LINK=%RUNTIME_LINK% -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin
+cmake .. -DCMAKE_BUILD_TYPE=%BUILD_TYPE% -DRUNTIME_LINK=%RUNTIME_LINK% -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=bin -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 if %errorlevel% neq 0 (
     echo %red%[ERROR] CMake configuration failed.%white%
     exit /b 1

@@ -17,15 +17,7 @@ if (MSVC)
         set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
         message(STATUS "Using dynamic runtime (/MD or /MDd)")
     endif()
-# elseif(UNIX AND NOT APPLE)
-#     set(CMAKE_SKIP_BUILD_RPATH FALSE)
-#     set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-#     set(CMAKE_INSTALL_RPATH "$ORIGIN")
 endif()
-
-# if(UNIX AND NOT APPLE AND RUNTIME_LINK STREQUAL "static")
-#     set(BUILD_SHARED_LIBS FALSE)
-# endif()
 
 # --- Linux static and dynamic linkage settings
 if(UNIX AND NOT APPLE)
